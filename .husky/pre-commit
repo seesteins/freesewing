@@ -1,1 +1,3 @@
+export PATH=/nix/store/6qim9wshdpcxhadndbvpbg4b16b8rdy1-yarn-1.22.22/bin:$PATH
+
 yarn lint-staged

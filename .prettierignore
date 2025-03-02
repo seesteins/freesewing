@@ -26,5 +26,9 @@ yarn.lock
 .gitkeep
 .all-contributorsrc
 .nvmrc
+.envrc
+.direnv
+flake.nix
+flake.lock
 ansible.cfg
 sites/shared/prebuild/data/*.mjs
