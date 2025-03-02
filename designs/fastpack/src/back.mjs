@@ -4,12 +4,13 @@ const sw = 12 * in_to_mm
 const sd = 1.475 * in_to_mm
 const bl = 16.25 * in_to_mm
 const bbw = 7.643 * in_to_mm
-
+//needs some modifications to go in the correct direction - ccw
 function shoulderPath(Path, Point, paths, points, store) {
   const shoulderWidth = sw
   const backTopPanelHeight = bth
   const shoulderDrop = sd
   store.set('backTopPanelHeight', backTopPanelHeight + shoulderDrop)
+  store.set('shoulderWidth', shoulderWidth)
   points.center = new Point(0, 0)
   points.right = points.center.shift(0, shoulderWidth / 2).shift(270, backTopPanelHeight)
   points.left = points.right.flipX()

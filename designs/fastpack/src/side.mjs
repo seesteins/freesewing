@@ -9,6 +9,7 @@ function draftSide({ Path, Point, paths, points, store, sa, measurements, option
   const backTopPanelHeight = store.get('backTopPanelHeight')
   const depthBottom = db
   const depthTop = dt
+  store.set('depthTop', depthTop)
   //define points
   points.topCurve = new Point(0, 0)
   points.backCurveTopCP = points.topCurve.shift(248.74, 0.40068 * sideCurveLength)
@@ -35,6 +36,7 @@ function draftSide({ Path, Point, paths, points, store, sa, measurements, option
     .move(points.topFront)
     .curve(points.frontCurveTopCP, points.frontCurveBottomCP, points.bottomFront)
     .hide()
+  store.set('frontCurveLength', paths.frontCurve.length())
   paths.sidePanel = new Path()
     .move(points.topCurve)
     .line(points.topBack)
