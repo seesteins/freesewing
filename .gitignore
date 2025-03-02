@@ -134,3 +134,6 @@ scripts/verdaccio.sh
 
 # e2e test results
 sites/*/playwright-report
+
+#nixos
+.direnv
