@@ -14,7 +14,7 @@ function shoulderPath(Path, Point, paths, points, store) {
   points.center = new Point(0, 0)
   points.right = points.center.shift(0, shoulderWidth / 2).shift(270, backTopPanelHeight)
   points.left = points.right.flipX()
-  paths.shoulderSeam = new Path().move(points.right).line(points.center).line(points.left)
+  paths.shoulderSeam = new Path().move(points.right).line(points.center).line(points.left).hide()
 
   return paths.shoulderSeam
 }
@@ -28,14 +28,14 @@ function draftBackTop({ Path, Point, paths, points, measurements, options, store
   points.rightTop = points.centerTop.shift(0, shoulderWidth / 2)
   points.leftTop = points.rightTop.flipX()
   paths.topSeam = new Path()
-    .move(points.leftTop)
+    .move(points.rightTop)
     .line(points.centerTop)
-    .line(points.rightTop)
+    .line(points.leftTop)
     .hide()
   paths.backTop = new Path()
-    .move(points.rightTop)
-    .join(paths.shoulderSeam)
-    .line(points.leftTop)
+    .move(points.leftTop)
+    .join(paths.shoulderSeam.reverse())
+    .line(points.rightTop)
     .join(paths.topSeam)
 
   return part

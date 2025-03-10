@@ -8,6 +8,7 @@ import { backTop, backBottom } from './back.mjs'
 import { side } from './side.mjs'
 import { front } from './front.mjs'
 import { top } from './top.mjs'
+import { vestMain } from './vest.mjs'
 
 // Create new design
 const Fastpack = new Design({
@@ -15,8 +16,8 @@ const Fastpack = new Design({
     name: 'fastpack',
     version: '0.0.1',
   },
-  parts: [backTop, backBottom, side, front, top],
+  parts: [vestMain, backTop, backBottom, side, front, top],
 })
 
 // Named exports
-export { top, front, backTop, backBottom, i18n, Fastpack }
+export { vestMain, top, front, backTop, backBottom, i18n, Fastpack }

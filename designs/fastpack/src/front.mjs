@@ -28,7 +28,7 @@ function draftFront({ Path, Point, paths, points, measurements, options, store, 
 }
 
 export const front = {
-  name: 'fastpack.frpnt',
+  name: 'fastpack.front',
   draft: draftFront,
   after: [side],
   measurements: [],
