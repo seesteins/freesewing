@@ -13,30 +13,56 @@ function shoulderPath(Path, Point, paths, points, store) {
   store.set('shoulderWidth', shoulderWidth)
   points.center = new Point(0, 0)
   points.right = points.center.shift(0, shoulderWidth / 2).shift(270, backTopPanelHeight)
-  points.left = points.right.flipX()
-  paths.shoulderSeam = new Path().move(points.right).line(points.center).line(points.left).hide()
+  paths.shoulderSeam = new Path().move(points.right).line(points.center).hide()
 
   return paths.shoulderSeam
 }
 
-function draftBackTop({ Path, Point, paths, points, measurements, options, store, part, sa }) {
+function draftBackTop({
+  Path,
+  Point,
+  paths,
+  points,
+  macro,
+  measurements,
+  options,
+  store,
+  part,
+  sa,
+}) {
   const shoulderDrop = sd
   const shoulderWidth = sw
   //ToDo define shoulderWidth in terms of measurements.shoulderToShoulder
   shoulderPath(Path, Point, paths, points, store)
   points.centerTop = new Point(0, -shoulderDrop)
   points.rightTop = points.centerTop.shift(0, shoulderWidth / 2)
-  points.leftTop = points.rightTop.flipX()
-  paths.topSeam = new Path()
-    .move(points.rightTop)
-    .line(points.centerTop)
-    .line(points.leftTop)
-    .hide()
-  paths.backTop = new Path()
-    .move(points.leftTop)
-    .join(paths.shoulderSeam.reverse())
-    .line(points.rightTop)
-    .join(paths.topSeam)
+  paths.topSeam = new Path().move(points.rightTop).line(points.centerTop).hide()
+  paths.bottom = paths.shoulderSeam.reverse()
+  paths.backTop = new Path().move(points.right).join(paths.topSeam)
+
+  // draw seam allowance if it is provided
+  if (sa) {
+    paths.felledsa = paths.shoulderSeam
+      .reverse()
+      .offset(2 * sa)
+      .hide()
+    points.shift = paths.felledsa.intersectsX(0.0)[0]
+    const shiftx = paths.felledsa.start().dx(points.shift)
+    const shifty = paths.felledsa.start().dy(points.shift)
+    paths.felledsa = paths.felledsa.translate(shiftx, shifty)
+    console.log('start', paths.bottom.start())
+    paths.sa = paths.backTop.offset(sa).join(paths.felledsa).close().attr('class', 'main fabric sa')
+  }
+
+  //close the part after adding the different seam allowances
+  paths.backTop.line(points.center).join(paths.bottom).close()
+
+  //add cut on fold
+  macro('cutonfold', {
+    from: points.centerTop,
+    to: points.center,
+    grainline: false,
+  })
 
   return part
 }

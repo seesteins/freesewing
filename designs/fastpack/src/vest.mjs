@@ -22,7 +22,7 @@ function draftVestMain({ Path, Point, paths, points, measurements, options, stor
   points.vestStrapBottomRight = new Point(vsbw, vsl)
   points.vestYokeTopright = points.vestTopCenter.shift(180 - 4.743, 6.047 * in_to_mm)
 
-  paths.top = new Path().move(points.vestTopCenter).line(points.vestYokeTopright)
+  paths.top = new Path().move(points.vestYokeTopright).line(points.vestTopCenter)
 
   return part
 }

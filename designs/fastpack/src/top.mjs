@@ -5,7 +5,7 @@ import { backTop } from './back.mjs'
 const in_to_mm = 25.4
 const cth = 8.5 * in_to_mm
 
-function draftTop({ Path, Point, paths, points, measurements, options, store, part }) {
+function draftTop({ Path, Point, paths, points, measurements, options, sa, store, part }) {
   const cinchTopHeight = cth
   const frontTopWidth = store.get('frontTopWidth')
   const shoulderWidth = store.get('shoulderWidth')
@@ -20,13 +20,17 @@ function draftTop({ Path, Point, paths, points, measurements, options, store, pa
   points.topRight = new Point(points.centerTop.dx(points.centerBackRight), 0)
 
   paths.top = new Path()
-    .move(points.topRight)
-    .line(points.centerTop)
-    .line(points.centerBottom)
+    .move(points.centerBottom)
     .line(points.frontSideRight)
     .line(points.sideBackRight)
     .line(points.centerBackRight)
+    .line(points.topRight)
+    .line(points.centerTop)
     .close()
+
+  if (sa) {
+    paths.sa = paths.top.offset(sa)
+  }
 
   return part
 }

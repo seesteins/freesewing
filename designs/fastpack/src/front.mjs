@@ -3,7 +3,7 @@ const in_to_mm = 25.4
 const ftw = 10.597 * in_to_mm
 const fbw = 7.508 * in_to_mm
 
-function draftFront({ Path, Point, paths, points, measurements, options, store, part }) {
+function draftFront({ Path, Point, paths, points, sa, measurements, options, store, part, macro }) {
   const frontTopWidth = ftw
   const frontBottomWidth = fbw
   const frontCurveLength = store.get('frontCurveLength')
@@ -18,11 +18,23 @@ function draftFront({ Path, Point, paths, points, measurements, options, store, 
   points.bottomLeft = points.bottomRight.flipX()
 
   paths.frontPanel = new Path()
-    .move(points.topCenter)
-    .line(points.bottomCenter)
+    .move(points.bottomCenter)
     .line(points.bottomRight)
     .line(points.topRight)
-    .close()
+    .line(points.topCenter)
+
+  if (sa) {
+    paths.sa = paths.frontPanel.offset(sa).attr('class', 'main fabric sa')
+    paths.sa.close()
+  }
+  paths.frontPanel.close()
+
+  //add cut on fold marking
+  macro('cutonfold', {
+    from: points.topCenter,
+    to: points.bottomCenter,
+    grainline: true,
+  })
 
   return part
 }
