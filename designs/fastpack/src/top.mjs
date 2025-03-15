@@ -42,6 +42,12 @@ function draftTop({ Path, Point, paths, points, measurements, options, macro, sa
 }
 
 function draftCinchChannel({ Path, Point, paths, points, measurements, options, store, part }) {
+  //todo
+  //Should be about an inch shorter than the total length of the top of drafTop
+  //finished height is about 3/4"
+  //draft seam allowance. rolled hem on ends 2*sa
+  //only draw if expand is on
+
   return part
 }
 

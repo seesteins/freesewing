@@ -31,7 +31,7 @@ export const vestYoke = {
   name: 'fastpack.vestYoke',
   draft: draftVestYoke,
   after: [],
-  measurements: ['waist'],
+  measurements: [],
 }
 
 export const vestMain = {

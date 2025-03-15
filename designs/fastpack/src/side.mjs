@@ -5,7 +5,7 @@ const dt = 7.166 * in_to_mm
 
 function draftSide({ Path, Point, paths, points, store, sa, measurements, options, part }) {
   //set sizing constants (might change later)
-  const sideCurveLength = store.get('backSideSeamLength')
+  const sideCurveLength = store.get('backSideLength')
   const backTopPanelHeight = store.get('backTopPanelHeight')
   const depthBottom = db
   const depthTop = dt

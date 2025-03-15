@@ -90,9 +90,10 @@ function draftBackBottom({
   //define paths
   paths.sideSeam = new Path().move(points.bottomRight).line(points.right).hide()
   paths.bottomSeam = new Path().move(points.bottomCenter).line(points.bottomRight).hide()
-  // save the length of the back side seam for use in the side panel curve
-  store.set('backSideSeamLength', paths.sideSeam.length())
-  //
+  // save seam lengths in the store for use in other panels
+  store.set('backSideLength', paths.sideSeam.length())
+  store.set('backBottomLength', paths.bottomSeam.length())
+  //join the paths that have normal sa
   paths.backBottom = paths.bottomSeam.join(paths.sideSeam)
   //calculate sa paths before joining all paths together to accomodate felled seam
   if (sa) {
@@ -112,7 +113,7 @@ function draftBackBottom({
   }
   //finish the panel outline after calculating seam allowances
   paths.backBottom = paths.backBottom.join(paths.shoulderSeam).close()
-
+  //add documentation
   macro('cutonfold', {
     from: points.center,
     to: points.bottomCenter,
