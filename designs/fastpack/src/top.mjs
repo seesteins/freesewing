@@ -5,7 +5,7 @@ import { backTop } from './back.mjs'
 const in_to_mm = 25.4
 const cth = 8.5 * in_to_mm
 
-function draftTop({ Path, Point, paths, points, measurements, options, sa, store, part }) {
+function draftTop({ Path, Point, paths, points, measurements, options, macro, sa, store, part }) {
   const cinchTopHeight = cth
   const frontTopWidth = store.get('frontTopWidth')
   const shoulderWidth = store.get('shoulderWidth')
@@ -29,8 +29,14 @@ function draftTop({ Path, Point, paths, points, measurements, options, sa, store
     .close()
 
   if (sa) {
-    paths.sa = paths.top.offset(sa)
+    paths.sa = paths.top.offset(sa).trim().addClass('top fabric sa')
   }
+
+  macro('cutonfold', {
+    from: points.centerTop,
+    to: points.centerBottom,
+    grainline: true,
+  })
 
   return part
 }

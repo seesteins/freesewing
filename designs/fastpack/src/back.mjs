@@ -67,20 +67,58 @@ function draftBackTop({
   return part
 }
 
-function draftBackBottom({ Path, Point, paths, points, store, measurements, options, part }) {
+function draftBackBottom({
+  Path,
+  Point,
+  paths,
+  points,
+  store,
+  macro,
+  measurements,
+  options,
+  utils,
+  sa,
+  part,
+}) {
   const backBottomWidth = bbw
   const backLength = bl
   //ToDo define backLength as a function of measurements.hpsToWaistBack
   shoulderPath(Path, Point, paths, points, store)
+  //define points for backpanel outline
   points.bottomRight = new Point(backBottomWidth / 2, backLength)
-  points.bottomLeft = points.bottomRight.flipX()
   points.bottomCenter = new Point(0, backLength)
-  paths.backBottom = new Path().move(points.bottomRight).join(paths.shoulderSeam)
+  //define paths
+  paths.sideSeam = new Path().move(points.bottomRight).line(points.right).hide()
+  paths.bottomSeam = new Path().move(points.bottomCenter).line(points.bottomRight).hide()
   // save the length of the back side seam for use in the side panel curve
-  store.set('backSideSeamLength', paths.backBottom.length() - paths.shoulderSeam.length())
-  console.log(store.get('backSideSeamLength'))
+  store.set('backSideSeamLength', paths.sideSeam.length())
+  //
+  paths.backBottom = paths.bottomSeam.join(paths.sideSeam)
+  //calculate sa paths before joining all paths together to accomodate felled seam
+  if (sa) {
+    paths.sa = paths.backBottom.offset(sa).hide()
+    paths.felledSa = paths.shoulderSeam.offset(2 * sa).hide()
+    points.felledSaEnd = paths.felledSa.end()
+    //calculate a corrected end point for the felled seam.
+    const x = points.felledSaEnd.x
+    const theta = points.felledSaEnd.angle(paths.felledSa.start())
+    points.correctedSa = points.felledSaEnd.shift(theta, -x / Math.cos(utils.deg2rad(theta)))
+    //close the seam allowance
+    paths.sa = paths.sa
+      .join(paths.felledSa)
+      .line(points.correctedSa)
+      .close()
+      .attr('class', 'main fabric sa')
+  }
+  //finish the panel outline after calculating seam allowances
+  paths.backBottom = paths.backBottom.join(paths.shoulderSeam).close()
 
-  paths.backBottom.line(points.bottomLeft).close()
+  macro('cutonfold', {
+    from: points.center,
+    to: points.bottomCenter,
+    grainline: true,
+  })
+
   return part
 }
 
